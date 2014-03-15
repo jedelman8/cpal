@@ -3,6 +3,11 @@ Email: jedelman8@gmail.com
 
 cpal.py is the main module.  It requires other modules such as Cisco, Arista, pandums, jformat, and counter.
 
+For background on CPAL, please read first two links and watch the demo at the 3rd link:
+
+http://www.jedelman.com/1/post/2014/02/common-programmable-abstraction-layer.html
+http://www.jedelman.com/1/post/2014/02/the-power-of-a-programmable-abstraction-layer.html
+http://www.jedelman.com/1/post/2014/03/demo-common-programmable-abstraction-layer.html
 
 If you want to contirubte, you are more than welcome.  There is still a ton to do on the first two module (onePK and eAPI) and it would be great to see more modules.  As more modules evolve, we'll need to update the main cpal.py file to include more variables/function that will in turn call the new modules.
 
