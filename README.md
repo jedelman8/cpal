@@ -11,6 +11,7 @@ Current plan (for me or you):
 - This is just a module now, but am going to include something in 'main' to be able to call specific functions for specific devices.  Good for helpdesk/admin types that don't need or want to be at the shell
 - Adding ODL as a southbound module
 - Update names from the vendor like Cisco and Arista.  Will change to cisco-onepk and arista-eapi to allow for more API types from the same vendor.
+- Jeremy Schulman also has the Juniper PyEZ module.  It would be great to build cohesiveness or just integrate that here as well.
 
 Things others have talked about:
 - Adding NX-API
