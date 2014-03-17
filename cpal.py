@@ -17,7 +17,7 @@ from datetime import datetime
 from counter import counter
 import pandums
 from arista import device1 as arista
-#from cisco import cisco
+from cisco import cisco
 
 __author__ = "Jason Edelman and ...come help out!"
 __copyright__ = "Copyright 2014, The CPAL Project"
