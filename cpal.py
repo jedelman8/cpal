@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 
-	'''
-	This is the main module of the common programmable abstraction layer.  It returns a data structure of type 'device.'  Ultimately, it is passing back
-	the native device type of said vendor API.  For example, it returns a NE for Cisco onePK and returns the main device 
-	for Arista eAPI (switch = Server(connection_parameters)).  It's basically returning 'switch.'  
-	__init__ calls the right vendor API and gathers device facts.  It is also returns a global list
-	of connected_devices.
-	'''
+'''
+This is the main module of the common programmable abstraction layer.  It 
+returns a data structure of type 'device.'  Ultimately, it is passing back
+the native device type of said vendor API.  For example, it returns a NE for 
+Cisco onePK and returns the main device for Arista eAPI (switch = Server(connection_parameters)).  
+It's basically returning 'switch.'  __init__ calls the right vendor API and 
+gathers device facts.  It is also returns a global list of connected_devices.
+'''
 
 import json
 import random
