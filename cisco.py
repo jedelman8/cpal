@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 
-	'''
-	This is the Cisco onePK module for CPAL.  It can be used by itself as well.
-	Today, this works with the Cisco all in one onePK development VM.  If using with external devices,
-	parameters in jconnect() will need to be updated. 
-
-	'''
+'''
+This is the Cisco onePK module for CPAL.  It can be used by itself as well.
+Today, this works with the Cisco all in one onePK development VM.  If using with external devices,
+parameters in jconnect() will need to be updated. 
+'''
 
 from configobj import ConfigObj
 from datetime import datetime
