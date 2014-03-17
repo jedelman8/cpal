@@ -17,7 +17,7 @@ from datetime import datetime
 from counter import counter
 import pandums
 from arista import device1 as arista
-from cisco import cisco
+#from cisco import cisco
 
 __author__ = "Jason Edelman and ...come help out!"
 __copyright__ = "Copyright 2014, The CPAL Project"
@@ -30,8 +30,7 @@ tracker = counter()
 
 class device():	
 
-
-	def __init__(self,obj,manufacturer,address):
+	def __init__(self, obj, manufacturer, address):
 		self.manufacturer = manufacturer
 		self.address = address
 		if self.manufacturer.lower() == 'cisco':
@@ -41,13 +40,13 @@ class device():
 				self.facts = self._thisdevice.getFacts()				
 				#self.facts_expanded = self._thisdevice.getFacts_expanded()
 			
-		else:
-			if manufacturer.lower() == 'arista':
-				self._thisdevice = arista(self.address,obj)
-				self.native = self._thisdevice.native
-				#if self.native != 'DNE':
-					#print self.native
-				self.facts = self._thisdevice.getFacts()
+		elif manufacturer.lower() == 'arista':
+			self._thisdevice = arista(self.address,obj)
+			self.native = self._thisdevice.native
+			#if self.native != 'DNE':
+				#print self.native
+			self.facts = self._thisdevice.getFacts()
+
 		self.connected_devices = tracker.calc(obj,self.address,self.facts['hostname'])
 
 	def refreshFacts(self):
