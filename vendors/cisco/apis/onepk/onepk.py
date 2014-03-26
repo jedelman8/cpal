@@ -110,7 +110,7 @@ class cisco():
 			vty_session = VtyService(self.native)
 			vty_session.open()
 			parsed_show = vty_session.write(command)
-			#print parsed_show
+			#print parsed_showd
 			vty_session.close()
 			return parsed_show
 
