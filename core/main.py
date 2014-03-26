@@ -91,10 +91,12 @@ class device():
 		return self._thisdevice.getInterfaceDetail()
 
 	def cli(self,command):
-		self._thisdevice.useCLI(command)
+		return self._thisdevice.useCLI(command)
 
 	def getRoutes(self):
 		return self._thisdevice.getRoutes()
+
+
 
 	#def disconnect(self):
 	#	self.native.disconnect()

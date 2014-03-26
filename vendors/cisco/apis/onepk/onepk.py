@@ -110,8 +110,9 @@ class cisco():
 			vty_session = VtyService(self.native)
 			vty_session.open()
 			parsed_show = vty_session.write(command)
-			print parsed_show
+			#print parsed_show
 			vty_session.close()
+			return parsed_show
 
 		def getInterfaces(self):
 			ifilter = InterfaceFilter()
@@ -132,6 +133,7 @@ class cisco():
 			return inter_dict
 
 
+		
 		def addCDPListener(self):
 			self.cdplistener = cpalCDPListener("CDP Listener")
 			cdpfilter = CDPFilter()
