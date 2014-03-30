@@ -16,8 +16,8 @@ import atexit
 from datetime import datetime
 from counter import counter
 import pandums
-#from cpal.vendors.arista.apis.eapi.eapi import arista
-#from cpal.vendors.cisco.apis.onepk.onepk import cisco
+from cpal.vendors.arista.apis.eapi.eapi import arista
+from cpal.vendors.cisco.apis.onepk.onepk import cisco
 from cpal.vendors.f5.apis.icontrol.icontrol import f5
 
 __author__ = "Jason Edelman and ...come help out!"
