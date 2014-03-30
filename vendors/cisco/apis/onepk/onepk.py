@@ -45,7 +45,7 @@ class cisco():
 			#self.myapp.name = "onePK-Python-Shell-CLI-" + str(random.randint(0,10000))
 			self.address = ip_address
 			self.native = self.jconnect() 
-			self.addCDPListener()
+			#self.addCDPListener()
 
 		def jconnect(self):
 
@@ -199,7 +199,8 @@ class cisco():
 			return facts
 
 		def getFacts_expanded(self):
-			neighbors = self.getNeighbors()
+			#neighbors = self.getNeighbors()
+			neighbors = 'WIP-IOSv cdp bug'
 			interface_detail = self.getInterfaceDetail()
 			facts = {'neighbors':neighbors,'interface_detail':interface_detail}
 			facts.update(self.getFacts())
