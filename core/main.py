@@ -16,9 +16,9 @@ import atexit
 from datetime import datetime
 from counter import counter
 import pandums
-from cpal.vendors.arista.apis.eapi.eapi import arista
-from cpal.vendors.cisco.apis.onepk.onepk import cisco
-
+#from cpal.vendors.arista.apis.eapi.eapi import arista
+#from cpal.vendors.cisco.apis.onepk.onepk import cisco
+from cpal.vendors.f5.apis.icontrol.icontrol import f5
 
 __author__ = "Jason Edelman and ...come help out!"
 __copyright__ = "Copyright 2014, The CPAL Project"
@@ -46,6 +46,11 @@ class device():
 			self.native = self._thisdevice.native
 			#if self.native != 'DNE':
 				#print self.native
+			self.facts = self._thisdevice.getFacts()
+
+		elif manufacturer.lower() == 'f5':
+			self._thisdevice = f5(self.address,obj)
+			self.native = self._thisdevice.native
 			self.facts = self._thisdevice.getFacts()
 
 		self.connected_devices = tracker.calc(obj,self.address,self.facts['hostname'])
@@ -96,7 +101,8 @@ class device():
 	def getRoutes(self):
 		return self._thisdevice.getRoutes()
 
-
+	def getPools(self):
+		return self._thisdevice.getPools()
 
 	#def disconnect(self):
 	#	self.native.disconnect()
