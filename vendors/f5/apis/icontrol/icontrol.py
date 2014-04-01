@@ -30,7 +30,7 @@ class f5():
 		
 		def __init__(self,ip_address,obj):
 			self.username = 'admin'
-			self.password = 'T0pdoggie'
+			self.password = 'admin'
 			self.obj = obj
 			self.address = ip_address
 			self.native = self.jconnect() 
@@ -90,7 +90,7 @@ class f5():
 			bootloc = self.getBootLocation()
 			timezone = self.getTimeZone()
 
-			facts = {'hostname': hostname,'Platform': platform,'Version': version,'Boot Location': bootloc,'Base MAC': basemac,'Uptime': uptime,'S/N': serial,'Time': time,'Timezone': timezone}
+			facts = {'Hostname': hostname,'Platform': platform,'Version': version,'Boot_Location': bootloc,'Base_MAC': basemac,'Uptime': uptime,'S/N': serial,'Time': time,'Timezone': timezone}
 
 			return facts
 
