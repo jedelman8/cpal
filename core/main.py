@@ -17,14 +17,11 @@ from cpal.core.counter import counter
 import pandums
 import pprint
 from cpal.vendors.arista.apis.eapi.eapi import arista
-<<<<<<< HEAD
 from cpal.vendors.cisco.apis.onepk.onepk import cisco
 from cpal.vendors.f5.apis.icontrol.icontrol import f5
-=======
-#from cpal.vendors.cisco.apis.onepk.onepk import cisco
+
 import argparse
 
->>>>>>> a9eab723711daf47d12c69ba74ea69427a0a9157
 
 __author__ = "Jason Edelman and ...come help out!"
 __copyright__ = "Copyright 2014, The CPAL Project"
@@ -35,11 +32,9 @@ __status__ = "Development"
 
 tracker = counter()
 
-# ----------------------------------------------------------
-# BEGIN CHANGES BY Yandy
-# added (object) as all new python classes should inherit from object
+
 class device():
-    def __init__(self, obj='r1', manufacturer='', address=''):
+    def __init__(self, obj='', manufacturer='', address=''):
         self.facts_expanded = {}
         self._thisdevice = ''
         self.native = ''
@@ -80,11 +75,11 @@ class device():
         else:
             self.obj = obj
 
-        self.beginCalls(self.obj)
+        self.deviceCalls(self.obj)
 
     # makes actual calls once internal variables are initialized
     # this method was moved from outside of __init__ to make it more modular
-    def beginCalls(self, obj):
+    def deviceCalls(self, obj):
         if self.manufacturer.lower() == 'cisco':
             self._thisdevice = cisco(self.address, obj)
             self.native = self._thisdevice.native
@@ -96,28 +91,23 @@ class device():
             self.native = self._thisdevice.native
         #if self.native != 'DNE':
             #print self.native
-        self.facts = self._thisdevice.getFacts()
-
-        self.connected_devices = tracker.calc(obj, self.address, self.facts['hostname'])
-
-    # END CHANGES BY YANDY
-    # ----------------------------------------------------------
-
-    def refreshFacts(self):
-        self.facts = self._thisdevice.getFacts()
-        print 'Refreshed'
-
-<<<<<<< HEAD
-		elif manufacturer.lower() == 'f5':
+            self.facts = self._thisdevice.getFacts()
+      	elif manufacturer.lower() == 'f5':
 			self._thisdevice = f5(self.address,obj)
 			self.native = self._thisdevice.native
 			self.facts = self._thisdevice.getFacts()
 
 		self.connected_devices = tracker.calc(obj,self.address,self.facts['hostname'])
-=======
+          
+
+
+
+    def refreshFacts(self):
+        self.facts = self._thisdevice.getFacts()
+        print 'Refreshed'
+
     def getFacts_expanded(self):
         self.facts_expanded = self._thisdevice.getFacts_expanded()
->>>>>>> a9eab723711daf47d12c69ba74ea69427a0a9157
 
     def getserialNumber(self):
         return self._thisdevice.getserialNumber()
@@ -155,19 +145,9 @@ class device():
     def getRoutes(self):
         return self._thisdevice.getRoutes()
 
-
-<<<<<<< HEAD
-	def getPools(self):
-		return self._thisdevice.getPools()
-=======
-
     #def disconnect(self):
     #   self.native.disconnect()
     #   print 'Disconnected'
->>>>>>> a9eab723711daf47d12c69ba74ea69427a0a9157
-
-
-    #atexit.register(disconnect) #currently not working
 
 
 if __name__ == "__main__":
