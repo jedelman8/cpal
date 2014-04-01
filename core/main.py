@@ -24,6 +24,7 @@ from cpal.vendors.f5.apis.icontrol.icontrol import f5
 
 
 
+
 __author__ = "Jason Edelman and ...come help out!"
 __copyright__ = "Copyright 2014, The CPAL Project"
 __version__ = "1.0.0"
@@ -98,9 +99,7 @@ class device():
 			self.native = self._thisdevice.native
 			self.facts = self._thisdevice.getFacts()
 
-		self.connected_devices = tracker.calc(obj,self.address,self.facts['hostname'])
-          
-
+        self.connected_devices = tracker.calc(obj,self.address,self.facts['hostname'])
 
 
     def refreshFacts(self):
@@ -172,9 +171,9 @@ class device():
     def getRoutes(self):
         return self._thisdevice.getRoutes()
 
-	#def disconnect(self):
-	#	self.native.disconnect()
-	#	print 'Disconnected'
+	def d(self):
+		self.native.disconnect()
+		print 'Disconnected'
 
 
     #def disconnect(self):
@@ -248,4 +247,4 @@ class device():
 	print datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 	pandums.pprint_table(table)
 	sys.exit()'''
->>>>>>> 5974cab8b67e5eeed4a4cb1d1b62f2436617de84
+
