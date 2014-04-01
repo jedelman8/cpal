@@ -16,11 +16,12 @@ from datetime import datetime
 from cpal.core.counter import counter
 import pandums
 import pprint
+import argparse
 from cpal.vendors.arista.apis.eapi.eapi import arista
 from cpal.vendors.cisco.apis.onepk.onepk import cisco
 from cpal.vendors.f5.apis.icontrol.icontrol import f5
 
-import argparse
+
 
 
 __author__ = "Jason Edelman and ...come help out!"
@@ -109,19 +110,19 @@ class device():
     def getFacts_expanded(self):
         self.facts_expanded = self._thisdevice.getFacts_expanded()
 
-<<<<<<< HEAD
+
     def getserialNumber(self):
         return self._thisdevice.getserialNumber()
-=======
+
 	def getCPU(self):
 		return self._thisdevice.getCPU()
 		
 	def getVersion(self):
 		return self._thisdevice.getVersion()
 
-        def getBaseMAC(self):
+    def getBaseMAC(self):
 		return self._thisdevice.getBaseMAC()
->>>>>>> 5974cab8b67e5eeed4a4cb1d1b62f2436617de84
+
 
     def getCPU(self):
         return self._thisdevice.getCPU()
@@ -132,10 +133,10 @@ class device():
     def gettotalMemory(self):
         return self._thisdevice.gettotalMemory()
 
-<<<<<<< HEAD
+
     def getHostname(self):
         return self._thisdevice.getHostname()
-=======
+
 	def getTime(self):
 		return self._thisdevice.getTime()
 
@@ -147,7 +148,7 @@ class device():
 		
 	def getPlatform(self):
 		return self._thisdevice.getPlatform()
->>>>>>> 5974cab8b67e5eeed4a4cb1d1b62f2436617de84
+
 
     def getUptime(self):
         return self._thisdevice.getUptime()
@@ -164,17 +165,17 @@ class device():
     def getInterfaceDetail(self):
         return self._thisdevice.getInterfaceDetail()
 
-<<<<<<< HEAD
+
     def cli(self, command):
         return self._thisdevice.useCLI(command)
 
     def getRoutes(self):
         return self._thisdevice.getRoutes()
-=======
+
 	#def disconnect(self):
 	#	self.native.disconnect()
 	#	print 'Disconnected'
->>>>>>> 5974cab8b67e5eeed4a4cb1d1b62f2436617de84
+
 
     #def disconnect(self):
     #   self.native.disconnect()
