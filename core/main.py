@@ -70,6 +70,12 @@ class device():
 
 	def getCPU(self):
 		return self._thisdevice.getCPU()
+		
+	def getVersion(self):
+		return self._thisdevice.getVersion()
+
+        def getBaseMAC(self):
+		return self._thisdevice.getBaseMAC()
 
 	def getfreeMemory(self):
 		return self._thisdevice.getfreeMemory()
@@ -79,6 +85,12 @@ class device():
 
 	def getHostname(self):
 		return self._thisdevice.getHostname()
+
+	def getTime(self):
+		return self._thisdevice.getTime()
+
+	def getTimeZone(self):
+		return self._thisdevice.getTimeZone()
 
 	def getUptime(self):
 		return self._thisdevice.getUptime()
@@ -101,9 +113,6 @@ class device():
 	def getRoutes(self):
 		return self._thisdevice.getRoutes()
 
-	def getPools(self):
-		return self._thisdevice.getPools()
-
 	#def disconnect(self):
 	#	self.native.disconnect()
 	#	print 'Disconnected'
@@ -112,10 +121,10 @@ class device():
 	#atexit.register(disconnect) #currently not working
 	
 
-if __name__ == "__main__":
+'''if __name__ == "__main__":
 
 	r1 = device("r1","cisco","10.1.1.110")
-	'''print datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+	print datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 	print 'Connecting to device...'
 	r2 = device('cisco','10.1.1.120')
 	print 'Connected to device1!'
