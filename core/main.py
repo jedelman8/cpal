@@ -42,8 +42,15 @@ class device():
         self.native = ''
         self.connected_devices = []
         self.facts = {}
+        self.manufacturer=manufacturer
+        self.ob = obj
+        self.address = address
 
-        # initialize variables with command-line arguments
+    
+        self.deviceCalls(obj)
+
+    def parseArgs(args):
+         # initialize variables with command-line arguments
         # added switches to allow script type use, such as -i [ip-address]
         parser = argparse.ArgumentParser(description='\
             input -f [function] -i [ip_address] \
@@ -57,27 +64,19 @@ class device():
         parser.add_argument('-p', '--password', help='Enter password for username')
         parser.add_argument('-m', '--manufacturer', help='Set the manufacturer to make calls on')
         parser.add_argument('-n', '--name', help='Sets the var_name')
-        arg = parser.parse_args()
+        
+        arg = args
 
-        # set ip address to make calls on
-        if arg.ip_address:
-            self.address = arg.ip_address
-        else:
-            self.address = address
+        '''
+        ###  Need to implement loop or go through args and 
+        ###  properly call device
 
-        # set manufacturer based on input
-        if arg.manufacturer:
-            self.manufacturer = arg.manufacturer
-        else:
-            self.manufacturer = manufacturer
+        Should look like this:
+        r = device('r',-m_var,-i_var)
+        r.-f_var
+        '''
 
-        # set var_name or obj as already named
-        if arg.name:
-            self.obj = arg.name
-        else:
-            self.obj = obj
 
-        self.deviceCalls(self.obj)
 
     # makes actual calls once internal variables are initialized
     # this method was moved from outside of __init__ to make it more modular
@@ -172,7 +171,7 @@ class device():
         return self._thisdevice.getRoutes()
 
 	def d(self):
-		self.native.disconnect()
+		self._thisdevice.disconnect()
 		print 'Disconnected'
 
 
@@ -181,9 +180,10 @@ class device():
     #   print 'Disconnected'
 
 
-'''if __name__ == "__main__":
+if __name__ == "__main__":
+    print sys.argv
+    parseArgs(sys.argv)
 
-<<<<<<< HEAD
     # Yandy for testing, values can be passed into __init__
     # dev1 = device("dev1", "arista", "192.168.31.22")
     # pp = pprint.PrettyPrinter(indent=4)
@@ -191,10 +191,10 @@ class device():
 
     # Yandy for testing, values can be as command-line arguments 
     # comment above section and add -- python main.py -i [ip_address] -m [manufacturer] -n 'SW1'
-    dev1 = device()
+    '''dev1 = device()
     pp = pprint.PrettyPrinter(indent=4)
     pp.pprint(dev1.facts)
-
+    '''
     # --------------------------------------------------------
 
     # --------------------------------------------------------
@@ -222,7 +222,7 @@ class device():
     # pandums.pprint_table(table)
     # sys.exit()
     # --------------------------------------------------------
-=======
+    '''
 	r1 = device("r1","cisco","10.1.1.110")
 	print datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 	print 'Connecting to device...'
@@ -246,5 +246,5 @@ class device():
 	print 'almost there...'
 	print datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 	pandums.pprint_table(table)
-	sys.exit()'''
-
+	sys.exit()
+    '''
