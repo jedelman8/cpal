@@ -82,16 +82,12 @@ class device():
 
 	def getCPU(self):
 		return self._thisdevice.getCPU()
-		
-	def getVersion(self):
-		return self._thisdevice.getVersion()
+
+    def getVersion(self):
+        return self._thisdevice.getVersion()
 
     def getBaseMAC(self):
-		return self._thisdevice.getBaseMAC()
-
-
-    def getCPU(self):
-        return self._thisdevice.getCPU()
+        return self._thisdevice.getBaseMAC()
 
     def getfreeMemory(self):
         return self._thisdevice.getfreeMemory()
@@ -103,11 +99,11 @@ class device():
     def getHostname(self):
         return self._thisdevice.getHostname()
 
-	def getTime(self):
-		return self._thisdevice.getTime()
+    def getTime(self):
+        return self._thisdevice.getTime()
 
-	def getTimeZone(self):
-		return self._thisdevice.getTimeZone()
+    def getTimeZone(self):
+        return self._thisdevice.getTimeZone()
 
 	def getUptime(self):
 		return self._thisdevice.getUptime()
@@ -141,16 +137,27 @@ class device():
 	def d(self):
 		self._thisdevice.disconnect()
 		print 'Disconnected'
-
-
+d
 def createDevice(args):
+    
     dev = device('dev',args['manufacturer'],args['ip_address'])
-    #print dev.getserialNumber()
+    
     function = args['function']
     print getattr(dev,function)()
     
     if args['manufacturer'] == 'cisco':
         dev.native.disconnect()
+
+def display():
+    print '********************************************************'
+    print '***IP Address (-i), manufacturer (-m), AND one of*******' 
+    print '***the following functions (-f) are required************'
+    print "***Use 'python main.py -h' for more info on proper usage"
+    print '********************************************************'
+    funcs = dir(device)
+    for each in funcs:
+        if not (each.startswith('__') or each == 'd' or each =='deviceCalls'):
+            print '*** '+each
 
     
 if __name__ == "__main__":
@@ -167,10 +174,16 @@ if __name__ == "__main__":
     parser.add_argument('-p', '--password', help='Enter password for username')
     parser.add_argument('-m', '--manufacturer', help='Set the manufacturer to make calls on')
     parser.add_argument('-n', '--name', help='Sets the var_name')
+    parser.add_argument('-d', '--display', help='Displays tasks that can be executed')
 
     args = vars(parser.parse_args())
     
-    createDevice(args)
+    #print args
+    if args['display'] or args['ip_address'] == None or args['function'] == None or args['manufacturer'] == None:
+        display()
+    else:
+        createDevice(args)
+
     # Yandy for testing, values can be passed into __init__
     # dev1 = device("dev1", "arista", "192.168.31.22")
     # pp = pprint.PrettyPrinter(indent=4)
