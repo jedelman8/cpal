@@ -33,42 +33,50 @@ class arista():
 
         return switch
 
+    def getCmd(self,cmd):
+        return self.native.runCmds( 1, [cmd] )
 
-    def getPlatform(self,output):
+    def getPlatform(self):
+        output = self.getCmd('show version')
         return output[0]["modelName"]
 
-    def getserialNumber(self,output):
+    def getserialNumber(self):
+        output = self.getCmd('show version')
         if output[0]["serialNumber"] == '':
             return '12345'
         else:
             return output[0]["serialNumber"]
 
-    def getUptime(self,response):
-        c = response[0]['output']
+    def getUptime(self):
+        output = self.native.runCmds( 1, ["show lldp local-info"],"text")
+        c = output[0]['output']
         return c[:9]
 
-    def getHostname(self,output):
+    def getHostname(self):
+        output = self.native.runCmds( 1, ["show lldp local-info"],"text")
         parse = output[0]['output'].split('\n')
         return parse [3].strip()[16:-1]
 
-    def getfreeMemory(self,output):
+    def getfreeMemory(self):
+        output = self.getCmd('show version')
         return output[0]['memFree']
 
-    def gettotalMemory(self,output):
+    def gettotalMemory(self):
+        output = self.getCmd('show version')
         return output[0]['memTotal']
 
     def getFacts(self):
-        sh_ver = self.native.runCmds( 1, ["show version"] )
+        #sh_ver = self.native.runCmds( 1, ["show version"] )
         sh_uptime = self.native.runCmds( 1, ["show uptime"],"text" )
-        sh_lldp_localinfo = self.native.runCmds( 1, ["show lldp local-info"],"text")
+        #sh_lldp_localinfo = self.native.runCmds( 1, ["show lldp local-info"],"text")
         #cpu_utilization = self.getCPU(ne)
-        free_memory = self.getfreeMemory(sh_ver)
-        total_memory = self.gettotalMemory(sh_ver)
-        uptime = self.getUptime(sh_uptime)
-        platform = self.getPlatform(sh_ver)
-        serial_number = self.getserialNumber(sh_ver)
+        free_memory = self.getfreeMemory()
+        total_memory = self.gettotalMemory()
+        uptime = self.getUptime()
+        platform = self.getPlatform()
+        serial_number = self.getserialNumber()
         connect_ip = self.address
-        hostname = self.getHostname(sh_lldp_localinfo)
+        hostname = self.getHostname()
 
         var_name = self.obj
 

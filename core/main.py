@@ -23,10 +23,9 @@ from cpal.vendors.f5.apis.icontrol.icontrol import f5
 
 
 
-__author__ = "Jason Edelman and ...come help out!"
+__author__ = "Jason Edelman"
 __copyright__ = "Copyright 2014, The CPAL Project"
 __version__ = "1.0.0"
-__maintainer__ = "Jason Edelman"
 __email__ = "jedelman8@gmail.com"
 __status__ = "Development"
 
@@ -46,25 +45,6 @@ class device():
 
         self.deviceCalls()
 
-    def parseArgs(args):
-         # initialize variables with command-line arguments
-        # added switches to allow script type use, such as -i [ip-address]
-        parser = argparse.ArgumentParser(description='\
-            input -f [function] -i [ip_address] \
-            -u [username] -p [password] -m [manufacturer]'\
-            )
-
-        parser.add_argument('-f', '--function', help='i.e. -f IntfStatus, show version')
-        parser.add_argument('-c', '--cli', help='i.e. same as -f, for redundancy')
-        parser.add_argument('-i', '--ip_address', help='i.e. -i "192.168.31.21"')
-        parser.add_argument('-u', '--username', help='Enter username of device')
-        parser.add_argument('-p', '--password', help='Enter password for username')
-        parser.add_argument('-m', '--manufacturer', help='Set the manufacturer to make calls on')
-        parser.add_argument('-n', '--name', help='Sets the var_name')
-        
-        print 
-
-        
 
     # makes actual calls once internal variables are initialized
     # this method was moved from outside of __init__ to make it more modular
@@ -78,8 +58,8 @@ class device():
         elif self.manufacturer.lower() == 'arista':
             self._thisdevice = arista(self.address, self.obj)
             self.native = self._thisdevice.native
-        #if self.native != 'DNE':
-            #print self.native
+            #if self.native != 'DNE':
+                #print self.native
             self.facts = self._thisdevice.getFacts()
       	elif manufacturer.lower() == 'f5':
 			self._thisdevice = f5(self.address,self.obj)
@@ -165,6 +145,7 @@ class device():
 
 def createDevice(args):
     dev = device('dev',args['manufacturer'],args['ip_address'])
+    #print dev.getserialNumber()
     function = args['function']
     print getattr(dev,function)()
     
