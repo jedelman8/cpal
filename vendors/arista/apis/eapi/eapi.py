@@ -1,6 +1,13 @@
 #!/usr/bin/env python
-#arista.py
-#Jason Edelman
+
+#   ------------------------------------------------------------------
+#   Arista eAPI CPAL Integration
+#
+#   Written by: 
+#       Jason Edelman
+#   Updated by: 
+#       Yandy Ramirez, @IP_Yandy
+#   ------------------------------------------------------------------
 
 
 from jsonrpclib import Server
@@ -20,13 +27,10 @@ class arista():
     def jconnect(self):
 
         connect_string = "https://" + self.username + ":" + self.password + "@" + self.address + "/command-api"
-        #print connect_string
+
         switch = 'DNE'
         try:
-            #print 'Trying to connect...'
-            #print 'Using API: ', connect_string
             switch = Server(connect_string)
-            #print 'Connection made to ' + self.address + ' successfully.'
         except Exception, e:
             print e
             print 'Unable to connect to device.'
@@ -53,10 +57,17 @@ class arista():
         up_time = c[13:].split(',')[0]
         return up_time
 
+    def getCPU(self):
+        output = self.native.runCmds(1, ['show processes top once'], 'text')
+        # cpu = index 0 of returned list  split by new-lines
+        # grabs the 3rd line which contains Cpu values at index [2]
+        cpu = output[0]['output'].split('\n')[2]
+        return cpu
+
     def getHostname(self):
-        output = self.native.runCmds( 1, ["show lldp local-info"],"text")
-        parse = output[0]['output'].split('\n')
-        return parse [3].strip()[16:-1]
+        output = self.getCmd("show hostname")
+        hostname = output[0]['hostname']
+        return hostname
 
     def getfreeMemory(self):
         output = self.getCmd('show version')
