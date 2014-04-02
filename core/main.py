@@ -23,8 +23,6 @@ from cpal.vendors.f5.apis.icontrol.icontrol import f5
 
 
 
-
-
 __author__ = "Jason Edelman and ...come help out!"
 __copyright__ = "Copyright 2014, The CPAL Project"
 __version__ = "1.0.0"
@@ -43,11 +41,10 @@ class device():
         self.connected_devices = []
         self.facts = {}
         self.manufacturer=manufacturer
-        self.ob = obj
+        self.obj = obj
         self.address = address
 
-    
-        self.deviceCalls(obj)
+        self.deviceCalls()
 
     def parseArgs(args):
          # initialize variables with command-line arguments
@@ -65,40 +62,31 @@ class device():
         parser.add_argument('-m', '--manufacturer', help='Set the manufacturer to make calls on')
         parser.add_argument('-n', '--name', help='Sets the var_name')
         
-        arg = args
+        print 
 
-        '''
-        ###  Need to implement loop or go through args and 
-        ###  properly call device
-
-        Should look like this:
-        r = device('r',-m_var,-i_var)
-        r.-f_var
-        '''
-
-
+        
 
     # makes actual calls once internal variables are initialized
     # this method was moved from outside of __init__ to make it more modular
-    def deviceCalls(self, obj):
+    def deviceCalls(self):
         if self.manufacturer.lower() == 'cisco':
-            self._thisdevice = cisco(self.address, obj)
+            self._thisdevice = cisco(self.address, self.obj)
             self.native = self._thisdevice.native
             if self.native != 'DNE':
                 self.facts = self._thisdevice.getFacts()
                 #self.facts_expanded = self._thisdevice.getFacts_expanded()
         elif self.manufacturer.lower() == 'arista':
-            self._thisdevice = arista(self.address, obj)
+            self._thisdevice = arista(self.address, self.obj)
             self.native = self._thisdevice.native
         #if self.native != 'DNE':
             #print self.native
             self.facts = self._thisdevice.getFacts()
       	elif manufacturer.lower() == 'f5':
-			self._thisdevice = f5(self.address,obj)
+			self._thisdevice = f5(self.address,self.obj)
 			self.native = self._thisdevice.native
 			self.facts = self._thisdevice.getFacts()
 
-        self.connected_devices = tracker.calc(obj,self.address,self.facts['hostname'])
+        self.connected_devices = tracker.calc(self.obj,self.address,self.facts['hostname'])
 
 
     def refreshFacts(self):
@@ -175,76 +163,39 @@ class device():
 		print 'Disconnected'
 
 
-    #def disconnect(self):
-    #   self.native.disconnect()
-    #   print 'Disconnected'
+def createDevice(args):
+    dev = device('dev',args['manufacturer'],args['ip_address'])
+    function = args['function']
+    print getattr(dev,function)()
+    
+    if args['manufacturer'] == 'cisco':
+        dev.native.disconnect()
 
-
+    
 if __name__ == "__main__":
-    print sys.argv
-    parseArgs(sys.argv)
 
+    parser = argparse.ArgumentParser(description='\
+            input -f [function] -i [ip_address] \
+            -u [username] -p [password] -m [manufacturer]'\
+            )
+    
+    parser.add_argument('-f', '--function', help='i.e. -f IntfStatus, show version')
+    parser.add_argument('-c', '--cli', help='i.e. same as -f, for redundancy')
+    parser.add_argument('-i', '--ip_address', help='i.e. -i "192.168.31.21"')
+    parser.add_argument('-u', '--username', help='Enter username of device')
+    parser.add_argument('-p', '--password', help='Enter password for username')
+    parser.add_argument('-m', '--manufacturer', help='Set the manufacturer to make calls on')
+    parser.add_argument('-n', '--name', help='Sets the var_name')
+
+    args = vars(parser.parse_args())
+    
+    createDevice(args)
     # Yandy for testing, values can be passed into __init__
     # dev1 = device("dev1", "arista", "192.168.31.22")
     # pp = pprint.PrettyPrinter(indent=4)
     # pp.pprint(dev1.facts)
 
     # Yandy for testing, values can be as command-line arguments 
-    # comment above section and add -- python main.py -i [ip_address] -m [manufacturer] -n 'SW1'
-    '''dev1 = device()
-    pp = pprint.PrettyPrinter(indent=4)
-    pp.pprint(dev1.facts)
-    '''
-    # --------------------------------------------------------
+    # comment above section and add -- python main.py -i [ip_address] -m [manufacturer] -f [function]
 
-    # --------------------------------------------------------
-    # print datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    # print 'Connecting to device...'
-    # r2 = device('cisco','10.1.1.120')
-    # print 'Connected to device1!'
-    # print datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    # print 'Connecting to next device...'
-    # r3 = device('cisco','10.1.1.130')
-    # print 'Connected to device2'
-    # print datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    # devlist = [r2,r3]
-    # row = []
-    # for dev in devlist:
-    #     temp = []
-    #     temp.append(dev.facts['hostname'])
-    #     temp.append(dev.facts['serial_number'])
-    #     temp.append(dev.facts['last_reboot_reason'])
-    #     row.append(temp)
-    # headers = [['Hostname', 'Serial Number', 'Last Reboot Reason']]
-    # table = headers + row
-    # print 'almost there...'
-    # print datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    # pandums.pprint_table(table)
-    # sys.exit()
-    # --------------------------------------------------------
-    '''
-	r1 = device("r1","cisco","10.1.1.110")
-	print datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-	print 'Connecting to device...'
-	r2 = device('cisco','10.1.1.120')
-	print 'Connected to device1!'
-	print datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-	print 'Connecting to next device...'
-	r3 = device('cisco','10.1.1.130')
-	print 'Connected to device2'
-	print datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-	devlist = [r2,r3]
-	row = []
-	for dev in devlist:
-		temp = []
-		temp.append(dev.facts['hostname'])
-		temp.append(dev.facts['serial_number'])
-		temp.append(dev.facts['last_reboot_reason'])
-		row.append(temp)
-	headers = [['Hostname', 'Serial Number', 'Last Reboot Reason']]
-	table = headers + row
-	print 'almost there...'
-	print datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-	pandums.pprint_table(table)
-	sys.exit()
-    '''
+ 
