@@ -57,6 +57,13 @@ class arista():
         up_time = c[13:].split(',')[0]
         return up_time
 
+    def getCPU(self):
+        output = self.native.runCmds(1, ['show processes top once'], 'text')
+        # cpu = index 0 of returned list  split by new-lines
+        # grabs the 3rd line which contains Cpu values at index [2]
+        cpu = output[0]['output'].split('\n')[2]
+        return cpu
+
     def getHostname(self):
         output = self.getCmd("show hostname")
         hostname = output[0]['hostname']
