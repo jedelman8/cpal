@@ -132,7 +132,8 @@ class cisco():
 								'tx_bandwidth':config.tx_bandwidth}
 			return inter_dict
 
-
+		def d(self):
+			self.native.disconnect()
 		
 		def addCDPListener(self):
 			self.cdplistener = cpalCDPListener("CDP Listener")
