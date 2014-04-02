@@ -39,7 +39,7 @@ class device():
         self.native = ''
         self.connected_devices = []
         self.facts = {}
-        self.manufacturer=manufacturer
+        self.manufacturer = manufacturer
         self.obj = obj
         self.address = address
 
@@ -61,7 +61,7 @@ class device():
             #if self.native != 'DNE':
                 #print self.native
             self.facts = self._thisdevice.getFacts()
-      	elif manufacturer.lower() == 'f5':
+      	elif self.manufacturer.lower() == 'f5':
 			self._thisdevice = f5(self.address,self.obj)
 			self.native = self._thisdevice.native
 			self.facts = self._thisdevice.getFacts()
@@ -178,5 +178,4 @@ if __name__ == "__main__":
 
     # Yandy for testing, values can be as command-line arguments 
     # comment above section and add -- python main.py -i [ip_address] -m [manufacturer] -f [function]
-
  
