@@ -79,9 +79,8 @@ class arista():
 
     def getFacts(self):
         #sh_ver = self.native.runCmds( 1, ["show version"] )
-        sh_uptime = self.native.runCmds( 1, ["show uptime"],"text" )
         #sh_lldp_localinfo = self.native.runCmds( 1, ["show lldp local-info"],"text")
-        #cpu_utilization = self.getCPU(ne)
+        cpu_utilization = self.getCPU()
         free_memory = self.getfreeMemory()
         total_memory = self.gettotalMemory()
         uptime = self.getUptime()
@@ -92,8 +91,9 @@ class arista():
 
         var_name = self.obj
 
-        facts = {'hostname': hostname, 'connect_ip': connect_ip,'platform':platform, 'serial_number':serial_number, 'system_uptime':uptime,'free_system_memory': free_memory,
-            'total_sytem_memory': total_memory,'vendor':'arista','var_name':var_name}
+        facts = {'hostname': hostname, 'connect_ip': connect_ip, 'platform':platform, 'serial_number':serial_number, \
+            'system_uptime':uptime, 'cpu_utilization':cpu_utilization, 'free_system_memory': free_memory,\
+            'total_sytem_memory': total_memory, 'vendor':'arista', 'var_name':var_name}
 
         config = ConfigObj('/home/cisco/apps/cpal/core/device_tags.ini').dict()
         for key in config.keys():

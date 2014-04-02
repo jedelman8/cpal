@@ -60,7 +60,7 @@ class device():
             self.native = self._thisdevice.native
             #if self.native != 'DNE':
                 #print self.native
-            self.facts = self._thisdevice.getFacts()
+            self.facts = self.getFacts()
       	elif self.manufacturer.lower() == 'f5':
 			self._thisdevice = f5(self.address,self.obj)
 			self.native = self._thisdevice.native
@@ -68,6 +68,11 @@ class device():
 
         self.connected_devices = tracker.calc(self.obj,self.address,self.facts['hostname'])
 
+    # Yandy: added getFacts to device, to streamline the calling a bit.
+    # can easily be taken off, if not desired.
+    def getFacts(self):
+        self.facts = self._thisdevice.getFacts()
+        return self.facts
 
     def refreshFacts(self):
         self.facts = self._thisdevice.getFacts()
@@ -147,7 +152,14 @@ def createDevice(args):
     dev = device('dev',args['manufacturer'],args['ip_address'])
     #print dev.getserialNumber()
     function = args['function']
-    print getattr(dev,function)()
+    value = getattr(dev, function)()
+
+    # prettifies the printing a bit, in case the returned value is more complex than a string
+    if type(value) is dict:
+    	pp = pprint.PrettyPrinter(indent=4)
+    	pp.pprint(value)
+    else:
+    	print value
     
     if args['manufacturer'] == 'cisco':
         dev.native.disconnect()
