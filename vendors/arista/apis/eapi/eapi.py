@@ -48,9 +48,9 @@ class arista():
             return output[0]["serialNumber"]
 
     def getUptime(self):
-        output = self.native.runCmds( 1, ["show lldp local-info"],"text")
+        output = self.native.runCmds( 1, ["show uptime"],"text")
         c = output[0]['output']
-        return c[:9]
+        return c[9:19]
 
     def getHostname(self):
         output = self.native.runCmds( 1, ["show lldp local-info"],"text")
