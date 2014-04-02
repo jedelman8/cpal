@@ -50,7 +50,8 @@ class arista():
     def getUptime(self):
         output = self.native.runCmds( 1, ["show uptime"],"text")
         c = output[0]['output']
-        return c[9:19]
+        up_time = c[13:].split(',')[0]
+        return up_time
 
     def getHostname(self):
         output = self.native.runCmds( 1, ["show lldp local-info"],"text")
