@@ -137,7 +137,7 @@ class device():
 	def d(self):
 		self._thisdevice.disconnect()
 		print 'Disconnected'
-d
+
 def createDevice(args):
     
     dev = device('dev',args['manufacturer'],args['ip_address'])
