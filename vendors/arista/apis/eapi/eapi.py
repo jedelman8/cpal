@@ -58,7 +58,7 @@ class arista():
         return up_time
 
     def getHostname(self):
-        output = self.native.runCmds( 1, ["show hostname"],"json")
+        output = self.getCmd( 1, ["show hostname"])
         hostname = output[0]['hostname']
         return hostname
 
