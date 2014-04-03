@@ -22,7 +22,12 @@ class arista():
         self.address = address
         self.obj = obj
         self.native = self.jconnect()
-        self.facts = self.getFacts()
+
+        # self.version = self.getVersionInfo() must be place here
+        # after call to jconnect() and before getFacts()
+        self.version_info = self.getVersionInfo()
+
+        self.facts = self.refreshFacts()
 
     def jconnect(self):
 
@@ -41,15 +46,15 @@ class arista():
         return self.native.runCmds( 1, [cmd] )
 
     def getPlatform(self):
-        output = self.getCmd('show version')
-        return output[0]["modelName"]
+        #output = self.getCmd('show version')
+        return self.version_info[0]["modelName"]
 
     def getserialNumber(self):
-        output = self.getCmd('show version')
-        if output[0]["serialNumber"] == '':
+        #output = self.getCmd('show version')
+        if self.version_info[0]["serialNumber"] == '':
             return '12345'
         else:
-            return output[0]["serialNumber"]
+            return self.version_info[0]["serialNumber"]
 
     def getUptime(self):
         output = self.native.runCmds( 1, ["show uptime"],"text")
@@ -61,24 +66,101 @@ class arista():
         output = self.native.runCmds(1, ['show processes top once'], 'text')
         # cpu = index 0 of returned list  split by new-lines
         # grabs the 3rd line which contains Cpu values at index [2]
-        cpu = output[0]['output'].split('\n')[2]
+        cpu_line = output[0]['output'].split('\n')[2]
+
+        # cpu is then narrowed down to the actual usage, up to the first instance of a comma ','
+        cpu = cpu_line[0:cpu_line.find(',')]
         return cpu
 
     def getHostname(self):
-        output = self.getCmd("show hostname")
-        hostname = output[0]['hostname']
+        ''' Returns the device's none FQDN hostname '''
+
+        version_int = self._versionList()
+
+        if int(version_int[0]) >= 4 and int(version_int[1]) >= 13:
+            output = self.getCmd("show hostname")
+            hostname = output[0]['hostname']
+        else:
+            # begins a breakdown of finding the hostname inside a string
+            # could probably be more efficient, but works for now
+            output = self.native.runCmds(1, ['show lldp local-info'], 'text')
+
+            # gets the 4th line of output which contains the hostname in FQDN format
+            host_line = output[0]['output'].split('\n')[3]
+
+            # splits the line into a list at the delimeter and assigns the 2nd indext to fqdn
+            # 2nd index contains the hostname
+            host_fqdn = host_line.split(':')[1]
+
+            # assignes the first index of fqdn after splitting at the delimeter (.)
+            # this splits the fqdn into three parts, the [hostname, domain, suffix]
+            hostname = host_fqdn.split('.')[0]
+
+            # indexing removes the " from the begining of the hostname
+            return hostname[2:]
+
+
+        return hostname
+
+    def getFQDN(self):
+        ''' 
+            Returns the device's FQDN hostname.domain.suffix
+            has not been added to main.py yet, waiting to make sure 
+            their's support accross platforms
+        '''
+
+        version_int = self._versionList()
+
+        if int(version_int[0]) >= 4 and int(version_int[1]) >= 13:
+            output = self.getCmd("show hostname")
+            hostname = output[0]['fqdn']
+
+        else:
+            # begins a breakdown of finding the hostname inside a string
+            # could probably be more efficient, but works for now
+            output = self.native.runCmds(1, ['show lldp local-info'], 'text')
+
+            # gets the 4th line of output which contains the hostname in FQDN format
+            host_line = output[0]['output'].split('\n')[3]
+
+            # splits the line into a list at the delimeter and assigns the 2nd indext to fqdn
+            # 2nd index contains the hostname
+            hostname = host_line.split(':')[1]
+
+            # indexing removes the quotes (") from the begining and end of the hostname
+            return hostname[2:-1]
+
+
         return hostname
 
     def getfreeMemory(self):
-        output = self.getCmd('show version')
-        return output[0]['memFree']
+        #output = self.getCmd('show version')
+        return self.version_info[0]['memFree']
 
     def gettotalMemory(self):
-        output = self.getCmd('show version')
-        return output[0]['memTotal']
+        #output = self.getCmd('show version')
+        return self.version_info[0]['memTotal']
 
-    def getFacts(self):
-        #sh_ver = self.native.runCmds( 1, ["show version"] )
+    # getVersionInfo created to streamline the calling of "show version"
+    # there was allot of code that repeated it, this way, only one call is needed
+    # speeds up the process and makes it more efficient.
+    def getVersionInfo(self):
+        ''' returns a 'show version' output as a dictionary '''
+        
+        version_info = self.getCmd('show version')
+        return version_info
+
+    def _versionList(self):
+        ''' 
+            Gets version and converts to a list of Ivalues
+            this allows comparisons between software versions
+            by calling int(on an index)
+        '''
+        version_list = self.version_info[0]['version'].split('.')
+        return version_list
+
+    def refreshFacts(self):
+        sh_ver = self.version_info[0]['version']
         #sh_lldp_localinfo = self.native.runCmds( 1, ["show lldp local-info"],"text")
         cpu_utilization = self.getCPU()
         free_memory = self.getfreeMemory()
@@ -91,14 +173,16 @@ class arista():
 
         var_name = self.obj
 
-        facts = {'hostname': hostname, 'connect_ip': connect_ip, 'platform':platform, 'serial_number':serial_number, \
-            'system_uptime':uptime, 'cpu_utilization':cpu_utilization, 'free_system_memory': free_memory,\
-            'total_sytem_memory': total_memory, 'vendor':'arista', 'var_name':var_name}
+        self.facts = {'hostname': hostname, 'connect_ip': connect_ip, 'platform':platform, 'version':sh_ver,\
+            'serial_number':serial_number, 'system_uptime':uptime, 'cpu_utilization':cpu_utilization, \
+            'free_system_memory': free_memory, 'total_sytem_memory': total_memory, 'vendor':'arista', 'var_name':var_name}
 
         config = ConfigObj('/home/cisco/apps/cpal/core/device_tags.ini').dict()
         for key in config.keys():
             if key == self.address:
-                facts.update(config[key])
+                self.facts.update(config[key])
 
-        return facts
+        return self.facts
 
+    def getFacts(self):
+        return self.facts
