@@ -12,11 +12,12 @@
 
 from jsonrpclib import Server
 from configobj import ConfigObj
+from cpal.scripts.utils import convertSize
 # from datetime import datetime
 
 class arista():
 
-    def __init__(self, address,obj):
+    def __init__(self, address, obj):
         self.username = 'arista'
         self.password = 'arista'
         self.address = address
@@ -148,7 +149,12 @@ class arista():
         if not self.version_info:
             self.getVersionInfo()
 
-        return self.version_info[0]['memFree']
+        free_mem = float(self.version_info[0]['memFree'])
+
+        # call to convertSize shows the sizes in more human-readable form
+        free_mem_str = convertSize(free_mem, 'MiB')
+
+        return free_mem_str
 
     def gettotalMemory(self):
         #output = self.getCmd('show version')
@@ -157,7 +163,12 @@ class arista():
         if not self.version_info:
             self.getVersionInfo()
 
-        return self.version_info[0]['memTotal']
+        mem_total = float(self.version_info[0]['memTotal'])
+
+        # call to convertSize shows the sizes in more human-readable form
+        mem_total_str = convertSize(mem_total, 'GiB')
+
+        return mem_total_str
 
     # getVersionInfo created to streamline the calling of "show version"
     # there was allot of code that repeated it, this way, only one call is needed
@@ -192,16 +203,16 @@ class arista():
         # and to remove the redundancy of __init__
         self.getVersionInfo()
 
-        sh_ver = self.getVersion()
+        sh_ver = str(self.getVersion())
         #sh_lldp_localinfo = self.native.runCmds( 1, ["show lldp local-info"],"text")
-        cpu_utilization = self.getCPU()
+        cpu_utilization = str(self.getCPU())
         free_memory = self.getfreeMemory()
         total_memory = self.gettotalMemory()
-        uptime = self.getUptime()
-        platform = self.getPlatform()
-        serial_number = self.getserialNumber()
+        uptime = str(self.getUptime())
+        platform = str(self.getPlatform())
+        serial_number = str(self.getserialNumber())
         connect_ip = self.address
-        hostname = self.getHostname()
+        hostname = str(self.getHostname())
 
         var_name = self.obj
 
