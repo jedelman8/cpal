@@ -22,12 +22,14 @@ class arista():
         self.address = address
         self.obj = obj
         self.native = self.jconnect()
+        self.facts = {}
+        self.version_info = {}
 
         # self.version = self.getVersionInfo() must be place here
         # after call to jconnect() and before getFacts()
-        self.version_info = self.getVersionInfo()
+        #self.version_info = self.getVersionInfo()
 
-        self.facts = self.refreshFacts()
+        #self.facts = self.refreshFacts()
 
     def jconnect(self):
 
@@ -47,11 +49,17 @@ class arista():
 
     def getPlatform(self):
         #output = self.getCmd('show version')
+        if not self.version_info:
+            self.getVersionInfo()
+
         return self.version_info[0]["modelName"]
 
     def getserialNumber(self):
         #output = self.getCmd('show version')
-        if self.version_info[0]["serialNumber"] == '':
+
+        if not self.version_info:
+            self.getVersionInfo()
+        elif self.version_info[0]["serialNumber"] == '':
             return '12345'
         else:
             return self.version_info[0]["serialNumber"]
@@ -135,10 +143,20 @@ class arista():
 
     def getfreeMemory(self):
         #output = self.getCmd('show version')
+
+        # checks if self.version_info is not empy
+        if not self.version_info:
+            self.getVersionInfo()
+
         return self.version_info[0]['memFree']
 
     def gettotalMemory(self):
         #output = self.getCmd('show version')
+
+        # checks if self.version_info is not empy
+        if not self.version_info:
+            self.getVersionInfo()
+
         return self.version_info[0]['memTotal']
 
     # getVersionInfo created to streamline the calling of "show version"
@@ -147,8 +165,8 @@ class arista():
     def getVersionInfo(self):
         ''' returns a 'show version' output as a dictionary '''
         
-        version_info = self.getCmd('show version')
-        return version_info
+        self.version_info = self.getCmd('show version')
+        return self.version_info
 
     def _versionList(self):
         ''' 
@@ -159,8 +177,22 @@ class arista():
         version_list = self.version_info[0]['version'].split('.')
         return version_list
 
-    def refreshFacts(self):
-        sh_ver = self.version_info[0]['version']
+    def getVersion(self):
+        ''' Returns the device running code version as a string '''
+
+        # checks if self.version_info is not empy
+        if not self.version_info:
+            self.getVersionInfo()
+            
+        return self.version_info[0]['version']
+
+    def getFacts(self):
+
+        # moved getVersionInfo() so this information gets refreshed as well
+        # and to remove the redundancy of __init__
+        self.getVersionInfo()
+
+        sh_ver = self.getVersion()
         #sh_lldp_localinfo = self.native.runCmds( 1, ["show lldp local-info"],"text")
         cpu_utilization = self.getCPU()
         free_memory = self.getfreeMemory()
@@ -182,7 +214,4 @@ class arista():
             if key == self.address:
                 self.facts.update(config[key])
 
-        return self.facts
-
-    def getFacts(self):
         return self.facts
