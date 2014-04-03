@@ -24,14 +24,10 @@ class arista():
         self.native = self.jconnect()
 
         # self.version = self.getVersionInfo() must be place here
-        # after call to jconnect()
+        # after call to jconnect() and before getFacts()
         self.version_info = self.getVersionInfo()
 
-        # self.facts = self.getFacts()
-        # self.facts values populated once getFacts() is called
-        # callign getFacts() while initializing the object, makes it inefficient 
-        # if a user wants to see the "facts" they should call getFacts() not object.facts 
-        self.facts = {}
+        self.facts = self.getFactsNew()
 
     def jconnect(self):
 
@@ -163,7 +159,7 @@ class arista():
         version_list = self.version_info[0]['version'].split('.')
         return version_list
 
-    def getFacts(self):
+    def getFactsNew(self):
         sh_ver = self.version_info[0]['version']
         #sh_lldp_localinfo = self.native.runCmds( 1, ["show lldp local-info"],"text")
         cpu_utilization = self.getCPU()
@@ -188,3 +184,5 @@ class arista():
 
         return self.facts
 
+    def getFacts(self):
+        return self.facts
