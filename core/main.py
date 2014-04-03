@@ -18,7 +18,7 @@ import pandums
 import pprint
 import argparse
 from cpal.vendors.arista.apis.eapi.eapi import arista
-from cpal.vendors.cisco.apis.onepk.onepk import cisco
+#from cpal.vendors.cisco.apis.onepk.onepk import cisco
 from cpal.vendors.f5.apis.icontrol.icontrol import f5
 
 
@@ -60,13 +60,13 @@ class device():
             self.native = self._thisdevice.native
             #if self.native != 'DNE':
                 #print self.native
-            #self.facts = self.getFacts()
+            self.facts = self.getFacts()
       	elif self.manufacturer.lower() == 'f5':
 			self._thisdevice = f5(self.address,self.obj)
 			self.native = self._thisdevice.native
 			self.facts = self._thisdevice.getFacts()
 
-        #self.connected_devices = tracker.calc(self.obj,self.address,self.facts['hostname'])
+        self.connected_devices = tracker.calc(self.obj,self.address,self.facts['hostname'])
 
     # Yandy: added getFacts to device, to streamline the calling a bit.
     # can easily be taken off, if not desired.
