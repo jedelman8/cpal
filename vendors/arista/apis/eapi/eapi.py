@@ -180,6 +180,10 @@ class arista():
     def getVersion(self):
         ''' Returns the device running code version as a string '''
 
+        # checks if self.version_info is not empy
+        if not self.version_info:
+            self.getVersionInfo()
+            
         return self.version_info[0]['version']
 
     def getFacts(self):
