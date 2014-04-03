@@ -168,15 +168,15 @@ def display():
     print '********************************************************'
     funcs = dir(device)
     for each in funcs:
-        if not (each.startswith('__') or each == 'd' or each =='deviceCalls'):
+        if not (each.startswith('__') or each == 'd' or each == 'deviceCalls'):
             print '*** '+each
 
     
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='\
-input -f [function] -i [ip_address] \
--u [username] -p [password] -m [manufacturer]'\
+	input -f [function] -i [ip_address] \
+	-u [username] -p [password] -m [manufacturer]'\
             )
     
     parser.add_argument('-f', '--function', help='i.e. -f IntfStatus, show version')
