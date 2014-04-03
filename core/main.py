@@ -61,10 +61,10 @@ class device():
             #if self.native != 'DNE':
                 #print self.native
             self.facts = self.getFacts()
-       elif self.manufacturer.lower() == 'f5':
-self._thisdevice = f5(self.address,self.obj)
-self.native = self._thisdevice.native
-self.facts = self._thisdevice.getFacts()
+        elif self.manufacturer.lower() == 'f5':
+            self._thisdevice = f5(self.address,self.obj)
+            self.native = self._thisdevice.native
+            self.facts = self._thisdevice.getFacts()
 
         self.connected_devices = tracker.calc(self.obj,self.address,self.facts['hostname'])
 
@@ -85,8 +85,8 @@ self.facts = self._thisdevice.getFacts()
     def getserialNumber(self):
         return self._thisdevice.getserialNumber()
 
-def getCPU(self):
-return self._thisdevice.getCPU()
+    def getCPU(self):
+        return self._thisdevice.getCPU()
 
     def getVersion(self):
         return self._thisdevice.getVersion()
@@ -110,11 +110,11 @@ return self._thisdevice.getCPU()
     def getTimeZone(self):
         return self._thisdevice.getTimeZone()
 
-def getUptime(self):
-return self._thisdevice.getUptime()
+    def getUptime(self):
+        return self._thisdevice.getUptime()
 
-def getPlatform(self):
-return self._thisdevice.getPlatform()
+    def getPlatform(self):
+        return self._thisdevice.getPlatform()
 
 
     def getUptime(self):
@@ -139,9 +139,9 @@ return self._thisdevice.getPlatform()
     def getRoutes(self):
         return self._thisdevice.getRoutes()
 
-def d(self):
-self._thisdevice.disconnect()
-print 'Disconnected'
+    def d(self):
+        self._thisdevice.disconnect()
+        print 'Disconnected'
 
 def createDevice(args):
     
