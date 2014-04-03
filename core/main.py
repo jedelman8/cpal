@@ -183,11 +183,4 @@ if __name__ == "__main__":
     args = vars(parser.parse_args())
     
     createDevice(args)
-    # Yandy for testing, values can be passed into __init__
-    # dev1 = device("dev1", "arista", "192.168.31.22")
-    # pp = pprint.PrettyPrinter(indent=4)
-    # pp.pprint(dev1.facts)
-
-    # Yandy for testing, values can be as command-line arguments 
-    # comment above section and add -- python main.py -i [ip_address] -m [manufacturer] -f [function]
  
