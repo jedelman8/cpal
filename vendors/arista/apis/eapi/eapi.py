@@ -27,7 +27,7 @@ class arista():
         # after call to jconnect() and before getFacts()
         self.version_info = self.getVersionInfo()
 
-        self.facts = self.getFactsNew()
+        self.facts = self.refreshFacts()
 
     def jconnect(self):
 
@@ -159,7 +159,7 @@ class arista():
         version_list = self.version_info[0]['version'].split('.')
         return version_list
 
-    def getFactsNew(self):
+    def refreshFacts(self):
         sh_ver = self.version_info[0]['version']
         #sh_lldp_localinfo = self.native.runCmds( 1, ["show lldp local-info"],"text")
         cpu_utilization = self.getCPU()
