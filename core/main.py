@@ -142,8 +142,10 @@ class device():
         print 'Disconnected'
 
 def createDevice(p_args):
-    
-    dev = device('dev', p_args['manufacturer'], p_args['ip_address'])
+
+    # sets dev_name if -n is used, otherwise generic 'dev' is used
+    dev_name = p_args['name'] if p_args['name'] else 'dev'
+    dev = device(dev_name, p_args['manufacturer'], p_args['ip_address'])
 
     if p_args['username'] and p_args['password']:
         dev.setLogin(p_args['username'], p_args['password'])
