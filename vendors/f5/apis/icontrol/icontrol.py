@@ -36,7 +36,7 @@ class f5():
 		
 		def __init__(self,ip_address,obj):
 			self.username = 'admin'
-			self.password = 'T0pdoggie'
+			self.password = 'admin'
 			self.obj = obj
 			self.address = ip_address
 			self.native = self.jconnect() 
