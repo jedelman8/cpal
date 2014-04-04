@@ -45,6 +45,10 @@ class arista():
 
         return switch
 
+    def setLogin(self, username, password):
+        self.username = username
+        self.password = password
+
     def getCmd(self,cmd):
         return self.native.runCmds( 1, [cmd] )
 
