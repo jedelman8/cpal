@@ -12,11 +12,12 @@
 
 from jsonrpclib import Server
 from configobj import ConfigObj
+from cpal.scripts.utils import convertSize
 # from datetime import datetime
 
 class arista():
 
-    def __init__(self, address,obj):
+    def __init__(self, address, obj):
         self.username = 'arista'
         self.password = 'arista'
         self.address = address

@@ -168,15 +168,15 @@ def display():
     print '********************************************************'
     funcs = dir(device)
     for each in funcs:
-        if not (each.startswith('__') or each == 'd' or each =='deviceCalls'):
+        if not (each.startswith('__') or each == 'd' or each == 'deviceCalls'):
             print '*** '+each
 
     
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='\
-input -f [function] -i [ip_address] \
--u [username] -p [password] -m [manufacturer]'\
+	input -f [function] -i [ip_address] \
+	-u [username] -p [password] -m [manufacturer]'\
             )
     
     parser.add_argument('-f', '--function', help='i.e. -f IntfStatus, show version')
@@ -195,12 +195,4 @@ input -f [function] -i [ip_address] \
         display()
     else:
         createDevice(args)
-
-    # Yandy for testing, values can be passed into __init__
-    # dev1 = device("dev1", "arista", "192.168.31.22")
-    # pp = pprint.PrettyPrinter(indent=4)
-    # pp.pprint(dev1.facts)
-
-    # Yandy for testing, values can be as command-line arguments
-    # comment above section and add -- python main.py -i [ip_address] -m [manufacturer] -f [function]
  
