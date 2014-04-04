@@ -68,6 +68,11 @@ class device():
 
         self.connected_devices = tracker.calc(self.obj,self.address,self.facts['hostname'])
 
+    # sets the username and password if specified, otherwise uses default
+    # method must exist in individual platform apis.
+    def setLogin(self, username, password):
+        self._thisdevice.setLogin(username, password)
+
     # Yandy: added getFacts to device, to streamline the calling a bit.
     # can easily be taken off, if not desired.
     def getFacts(self):
@@ -116,13 +121,6 @@ class device():
     def getPlatform(self):
         return self._thisdevice.getPlatform()
 
-
-    def getUptime(self):
-        return self._thisdevice.getUptime()
-
-    def getPlatform(self):
-        return self._thisdevice.getPlatform()
-
     def getReasonforReboot(self):
         return self._thisdevice.getReasonforReboot()
 
@@ -143,19 +141,24 @@ class device():
         self._thisdevice.disconnect()
         print 'Disconnected'
 
-def createDevice(args):
+def createDevice(p_args):
     
-    dev = device('dev',args['manufacturer'],args['ip_address'])
+    dev = device('dev', p_args['manufacturer'], p_args['ip_address'])
+
+    if p_args['username'] and p_args['password']:
+        dev.setLogin(p_args['username'], p_args['password'])
     
-    function = args['function']
+    # sets the function based on the command-line argument passed -f or -c
+    function = p_args['function'] if p_args['function'] else p_args['cli']
     value = getattr(dev, function)()
 
-    # prettifies the printing a bit, in case the returned value is more complex than a string
+    # prettifies the printing a bit, in case the returned value is 
+    # more complex than a string
     if type(value) is dict:
-     pp = pprint.PrettyPrinter(indent=4)
-     pp.pprint(value)
+        pp = pprint.PrettyPrinter(indent=4)
+        pp.pprint(value)
     else:
-     print value
+        print value
     
     if args['manufacturer'] == 'cisco':
         dev.native.disconnect()
@@ -175,8 +178,8 @@ def display():
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='\
-	input -f [function] -i [ip_address] \
-	-u [username] -p [password] -m [manufacturer]'\
+    input -f [function] -i [ip_address] \
+    -u [username] -p [password] -m [manufacturer]'\
             )
     
     parser.add_argument('-f', '--function', help='i.e. -f IntfStatus, show version')
@@ -191,7 +194,9 @@ if __name__ == "__main__":
     args = vars(parser.parse_args())
     
     #print args
-    if args['display'] or args['ip_address'] == None or args['function'] == None or args['manufacturer'] == None:
+    if args['display'] or args['ip_address'] == None or args['manufacturer'] == None:
+        display()
+    elif args['function'] == None and args['cli'] == None:
         display()
     else:
         createDevice(args)
