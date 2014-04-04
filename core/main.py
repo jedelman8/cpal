@@ -18,7 +18,7 @@ import pandums
 import pprint
 import argparse
 from cpal.vendors.arista.apis.eapi.eapi import arista
-from cpal.vendors.cisco.apis.onepk.onepk import cisco
+#from cpal.vendors.cisco.apis.onepk.onepk import cisco
 from cpal.vendors.f5.apis.icontrol.icontrol import f5
 
 
