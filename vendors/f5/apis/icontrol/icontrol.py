@@ -36,7 +36,7 @@ class f5():
 		
 		def __init__(self,ip_address,obj):
 			self.username = 'admin'
-			self.password = 'admin'
+			self.password = 'T0pdoggie'
 			self.obj = obj
 			self.address = ip_address
 			self.native = self.jconnect() 
@@ -163,12 +163,66 @@ class f5():
                         return self.native.System.SoftwareManagement.get_boot_location()
 
                 def getserialNumber(self):
+                        #This call returns quite a bit of information
                         systeminfo = self.native.System.SystemInfo.get_system_information()
+                        #We just want the serial number
                         serialnumber = systeminfo['chassis_serial']
                         return serialnumber
 
+		def getFQDN(self):
+		        #This call always returns the FQDN so lets store in a variable for getHostname
+                        fqdn = self.native.System.Inet.get_hostname()
+			return fqdn
+
 		def getHostname(self):
-			return self.native.System.Inet.get_hostname()
+		        #Split FQDN using '.' as a delimiter, the hostname is the first field (zero indexed, hence [0])
+                        fqdn = self.native.System.Inet.get_hostname()
+		        return fqdn.split('.')[0]
+		        
+                def getInterfaces(self):
+                        #This gets a list of all physical interfaces
+                        interfaces = self.native.Networking.Interfaces.get_list()
+                        return interfaces
+
+                def getInterfaceNumber(self):
+                        #This gets a list of all physical interfaces (Layer 1)
+                        interfaces = self.native.Networking.Interfaces.get_list()
+                        #We need to know how many there are for later operations
+                        interfacenumber = len(interfaces)
+                        return interfacenumber
+                        
+                        #Haven't quite worked out how to iterate through the list and display information on each
+                        
+                def getVLANNumber(self):
+                        #This gets a list of all VLANs (Layer 2)
+                        vlans = self.native.Networking.VLAN.get_list()
+                        #We need to know how many there are for later operations
+                        vlannumber = len(vlans)
+                        return vlannumber
+                        
+                        #Haven't quite worked out how to iterate through the list and display information on each
+
+                def getIPNumber(self):
+                        #This gets a list of all Self IPs (Layer 3)
+                        ips = self.native.Networking.SelfIPV2.get_list()
+                        #We need to know how many there are for later operations
+                        ipnumber = len(ips)
+                        return ipnumber
+
+                        #Haven't quite worked out how to iterate through the list and display information on each
+                        
+                def getTunnelNumber(self):
+                        #This gets a list of all Tunnels (IPsec, Layer 4)
+                        tunnels = self.native.Networking.Tunnel.get_list()
+                        #We need to know how many there are for later operations
+                        tunnelnumber = len(tunnels)
+                        return tunnelnumber
+
+                        #Haven't quite worked out how to iterate through the list and display information on each
+
+		def setLogin(self, username, password):
+			self.username = username
+			self.password = password
 
 		def getFacts(self):
                         uptime = self.getUptime()
@@ -177,15 +231,22 @@ class f5():
                         basemac = self.getBaseMAC()
                         serial = self.getserialNumber()
 			hostname = self.getHostname()
+			interfaces = self.getInterfaces()
+			interfacenumber = self.getInterfaceNumber()
+			vlannumber = self.getVLANNumber()
+			selfipnumber = self.getIPNumber()
+			tunnelnumber = self.getTunnelNumber()
+			fqdn = self.getFQDN()
 			time = self.getTime()
 			bootloc = self.getBootLocation()
 			timezone = self.getTimeZone()
 
 			var_name = self.obj
 
-			facts = {'hostname': hostname,'Platform': platform,'Version': version,'Boot_Location': bootloc,\
+			facts = {'hostname': hostname,'FQDN': fqdn,'Platform': platform,'Version': version,'Boot_Location': bootloc,\
                           'Base_MAC': basemac,'Uptime': uptime,'S/N': serial,'Time': time,'Timezone': timezone,\
-                          'Vendor': 'F5 Networks','var_name':var_name}
+                          'Physical_Interfaces': interfacenumber,'Physical_Interfaces': interfaces,'VLANs': vlannumber,\
+                          'Self_IPs': selfipnumber,'Tunnel_Number': tunnelnumber,'Vendor': 'F5 Networks','var_name':var_name}
    
                         config = ConfigObj('/c/cpal/core/device_tags.ini').dict()
                         for key in config.keys():
@@ -193,4 +254,3 @@ class f5():
                                 facts.update(config[key])
 
 			return facts
-

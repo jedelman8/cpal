@@ -18,7 +18,7 @@ import pandums
 import pprint
 import argparse
 from cpal.vendors.arista.apis.eapi.eapi import arista
-from cpal.vendors.cisco.apis.onepk.onepk import cisco
+#from cpal.vendors.cisco.apis.onepk.onepk import cisco
 from cpal.vendors.f5.apis.icontrol.icontrol import f5
 
 
@@ -117,7 +117,6 @@ class device():
     def gettotalMemory(self):
         return self._thisdevice.gettotalMemory()
 
-
     def getHostname(self):
         return self._thisdevice.getHostname()
 
@@ -142,12 +141,27 @@ class device():
     def getInterfaceDetail(self):
         return self._thisdevice.getInterfaceDetail()
 
-
     def cli(self, command):
         return self._thisdevice.useCLI(command)
 
     def getRoutes(self):
         return self._thisdevice.getRoutes()
+        
+    def getInterfaceNumber(self):
+        return self._thisdevice.getInterfaceNumber() if getattr(self._thisdevice,'getInterfaceNumber',None)\
+            else '*** getInterfaceNumber function does not exist for specified device (API) ***'
+            
+    def getVLANNumber(self):
+        return self._thisdevice.getVLANNumber() if getattr(self._thisdevice,'getVLANNumber',None)\
+            else '*** getVLANNumber function does not exist for specified device (API) ***'
+            
+    def getIPNumber(self):
+        return self._thisdevice.getIPNumber() if getattr(self._thisdevice,'getIPNumber',None)\
+            else '*** getIPNumber function does not exist for specified device (API) ***'
+            
+    def getTunnelNumber(self):
+        return self._thisdevice.getTunnelNumber() if getattr(self._thisdevice,'getTunnelNumber',None)\
+            else '*** getTunnelNumber function does not exist for specified device (API) ***'
 
     def d(self):
         self._thisdevice.disconnect()
