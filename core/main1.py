@@ -97,19 +97,7 @@ class device():
         return self._thisdevice.getVersion()
 
     def getBaseMAC(self):
-        # Testing to prevent AttributeError to be thrown when trying to call
-        # a function that is not in the specific device/API being used.  
-        # This works...will add to other functions in the coming week
-
-        '''if getattr(self._thisdevice,'getBaseMAC',None):
-            value = self._thisdevice.getBaseMAC()
-        else:
-            value = '*** function does not exist for specified device (API) ***'
-
-        return value '''
-
-        return self._thisdevice.getBaseMAC() if getattr(self._thisdevice,'getBaseMAC',None)\
-            else '*** function does not exist for specified device (API) ***'
+        return self._thisdevice.getBaseMAC()
 
     def getfreeMemory(self):
         return self._thisdevice.getfreeMemory()
