@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
 SUFFIXES = {1000: ['KB', 'MB', 'GB', 'TB'],
-            1024: ['KiB', 'MiB', 'GiB', 'TiB']}
+            1024: ['KB', 'MB', 'GB', 'TB']}
 
 def convertSize(size, suffix, kilobyte_1024_bytes=True):
-    '''Convert a file size to human-readable form.
+    '''
+    Convert a file size to human-readable form.
 
     Keyword arguments:
     size                                     --      file size in bytes
