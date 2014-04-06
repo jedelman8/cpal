@@ -1,5 +1,6 @@
 *.swp
 *.pyc
+*.py[cod]
 eapiLib.py
 eapiCalls.py
 *.sublime-project
