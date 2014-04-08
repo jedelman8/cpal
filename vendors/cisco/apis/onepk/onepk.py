@@ -132,7 +132,7 @@ class cisco():
 								'tx_bandwidth':config.tx_bandwidth}
 			return inter_dict
 
-		def d(self):
+		def disconnect(self):
 			self.native.disconnect()
 		
 		def addCDPListener(self):
